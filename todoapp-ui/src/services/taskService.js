@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.API_BASE_URL || 'http://localhost:5270/api/todo';
+const API_BASE_URL = import.meta.env.API_BASE_URL;
 
 // Get my tasks by email
 export const getTasks = async (email) => {

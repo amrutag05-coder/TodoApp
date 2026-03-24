@@ -20,29 +20,17 @@ public class TodoController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves tasks - all, by creator email, or assigned to email
+    /// Retrieves all tasks created by the specified user
     /// </summary>
-    /// <param name="email">Optional email to filter tasks</param>
-    /// <param name="assigned">If true returns tasks assigned to email</param>
+    /// <param name="email">Email of the user</param>
     [HttpGet]
-    public async Task<IActionResult> GetAll(
-        [FromQuery] string? email,
-        [FromQuery] bool? assigned)
+    public async Task<IActionResult> GetAll([FromQuery] string? email)
     {
-        if (!string.IsNullOrWhiteSpace(email) && assigned == true)
-        {
-            var assignedTasks = await _repository.GetAssignedToAsync(email);
-            return Ok(assignedTasks);
-        }
+        if (string.IsNullOrWhiteSpace(email))
+            return BadRequest(ErrorMessages.EmailRequired);
 
-        if (!string.IsNullOrWhiteSpace(email))
-        {
-            var myTasks = await _repository.GetMyTasksAsync(email);
-            return Ok(myTasks);
-        }
-
-        var allTasks = await _repository.GetAllAsync();
-        return Ok(allTasks);
+        var tasks = await _repository.GetMyTasksAsync(email);
+        return Ok(tasks);
     }
 
     /// <summary>
@@ -137,5 +125,29 @@ public class TodoController : ControllerBase
             return NotFound(ErrorMessages.TaskNotFound);
 
         return NoContent();
+    }
+    /// <summary>
+    /// Retrieves all incomplete tasks due today
+    /// </summary>
+    /// <returns>List of tasks due today ordered by due date</returns>
+    [HttpGet("due-today")]
+    public async Task<IActionResult> GetDueToday()
+    {
+        var tasks = await _repository.GetDueTodayAsync();
+        return Ok(tasks);
+    }
+
+    /// <summary>
+    /// Retrieves all tasks created by the user that are delegated to others
+    /// </summary>
+    /// <param name="email">Email of the task creator</param>
+    [HttpGet("delegated")]
+    public async Task<IActionResult> GetDelegated([FromQuery] string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return BadRequest(ErrorMessages.EmailRequired);
+
+        var tasks = await _repository.GetDelegatedAsync(email);
+        return Ok(tasks);
     }
 }

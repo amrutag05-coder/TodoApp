@@ -54,15 +54,18 @@ public class TodoRepository : ITodoRepository
             .ToListAsync();
     }
 
-    /// <inheritdoc />
-    public async Task<IEnumerable<TodoTask>> GetAssignedToAsync(string email)
+    /// <inheritdoc/>
+    public async Task<IEnumerable<TodoTask>> GetDelegatedAsync(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new ArgumentNullException(nameof(email), ErrorMessages.EmailRequired);
 
-        return await _context.Tasks.
-            Where(task => string.Equals(task.AssignedToEmail, email, StringComparison.OrdinalIgnoreCase))
-            .OrderBy(task => task.DueDate)
+        return await _context.Tasks
+            .Where(t =>
+                string.Equals(t.CreatedByEmail, email, StringComparison.OrdinalIgnoreCase)
+                && t.AssignedToEmail != null
+                && !string.Equals(t.AssignedToEmail, email, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(t => t.CreatedAt)
             .ToListAsync();
     }
 

@@ -29,12 +29,12 @@ public interface ITodoRepository
     Task<IEnumerable<TodoTask>> GetDueTodayAsync();
 
     /// <summary>
-    /// Retrieves all tasks assigned to a specific user, ordered by due date (soonest first)
+    /// Retrieves all tasks created by a specific user that have been delegated to someone else
     /// </summary>
     /// <param name="email">Email of the task creator</param>
-    /// <returns>Tasks whose AssignedToEmail matches the provided email</returns>
+    /// <returns>Tasks created by the user that are assigned to others</returns>
     /// <exception cref="ArgumentNullException">Thrown when email is null or empty</exception>
-    Task<IEnumerable<TodoTask>> GetAssignedToAsync(string email);
+    Task<IEnumerable<TodoTask>> GetDelegatedAsync(string email);
 
     /// <summary>
     /// Retrieves all tasks created by a specific user

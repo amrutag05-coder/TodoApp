@@ -1,9 +1,9 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Get my tasks by email
 export const getTasks = async (email) => {
     if (!email) return [];
-    const response = await fetch(`${API_BASE_URL}?email=${email}`);
+    const response = await fetch(`${BASE_URL}?email=${email}`);
     if (!response.ok) throw new Error('Failed to fetch tasks');
     return response.json();
 };

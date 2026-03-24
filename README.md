@@ -3,8 +3,8 @@
 A full-stack todo task management application built with .NET 10 Web API and React. Designed as a production-focused MVP with real-world features beyond basic CRUD.
 
 ## Live Demo
-- Frontend: _coming soon_
-- API Docs: _coming soon_
+- Frontend: https://todoapp-ui.onrender.com/
+- API Docs: https://todoapp-7mk5.onrender.com/swagger/index.html
 
 ## Tech Stack
 
